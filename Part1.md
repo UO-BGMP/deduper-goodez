@@ -6,14 +6,13 @@
 
 ### Defining the problem
 
-When PCR is used to amplify sequency libraries, it is important to consider how this introduces bias in the abundance of 
+When PCR is used to amplify sequence libraries, it is important to consider how this introduces bias in the abundance of 
 different sequences. One way to avoid this bias during library preparation is to label the molecules with unique molecular 
 identifiers (UMIs) before performing PCR. This allows us to recognize which reads are amplicons so we can discard them. 
 In addition to the UMIs, PCR duplicates can also be recognized within a SAM file after aligning the reads. There are a few clues 
 in SAM files which suggest duplication:
 
-* Duplicate reads should have **identical `POS` values** (left-most starting position), provided there is no sequencing error causing the 
-position to shift slightly
+* Duplicate reads should have **identical `POS` values** (left-most starting position), provided there is no sequencing error causing the position to shift slightly
      * This can be corrected with information from the `CIGAR` string
 * Duplicate reads should be **located on the same chromosome** (3rd field of SAM file)
 * As mentioned before, duplicate reads should be labeled with **identical UMIs**, provided there is no sequencing error within the UMI
@@ -21,9 +20,9 @@ position to shift slightly
 ---
 
 ### Pseudocode to dedupe a SAM file
-##### *NOTE: For now the code is designed for reads which are single-end, uniquely mapped, soft clipped, and untrimmed.*
+##### *NOTE: For now, the code is designed for reads which are single-end, uniquely mapped, soft clipped, and untrimmed.*
 
-(Before running the code, sort the BAM file by chromosome and position using `samtools`.)
+(Before running the code, sort the SAM file by chromosome and position using `samtools`.)
 
 Utilize `argparse` to take in files and any other options the user might specify
 
@@ -38,7 +37,7 @@ Open the file and iterate through each line:
      * POSITION = 4th field
      * CIGAR = 5th field
      * etc.
-* Check if the UMI at the end of the first field is a member of our defined UMIs
+* Check if the UMI at the end of the first field is a member of the defined UMIs
      * If it does **NOT** match, throw out this read and move to the next line
 * Check in `CIGAR` if the read is soft clipped at the left-most end
      * If so, subtract the amount clipped from the `POSITION`
