@@ -18,3 +18,48 @@ position to shift slightly
 * Duplicate reads should be **located on the same chromosome** (3rd field of SAM file)
 * As mentioned before, duplicate reads should be labeled with **identical UMIs**, provided there is no sequencing error within the UMI
 
+---
+
+### Pseudocode to dedupe a SAM file
+##### *NOTE: For now the code is designed for reads which are single-end, uniquely mapped, soft clipped, and untrimmed.*
+
+(Before running the code, sort the BAM file by chromosome and position using `samtools`.)
+
+Utilize `argparse` to take in files and any other options the user might specify
+
+Define UMIs in some form of `list/dictionary` from an input file or manually define them
+
+Open the file and iterate through each line:
+* Ignore the header section (lines beginning with `@`)
+* Separate the fields of the current line delimited by `tab` characters
+* Define relevant local variables
+     * UMI = end of 1st field
+     * CHROMOSOME = 3rd field
+     * POSITION = 4th field
+     * CIGAR = 5th field
+     * etc.
+* Check if the UMI at the end of the first field is a member of our defined UMIs
+     * If it does **NOT** match, throw out this read and move to the next line
+* Check in `CIGAR` if the read is soft clipped at the left-most end
+     * If so, subtract the amount clipped from the `POSITION`
+* Check if the current `UMI` and adjusted `POSITION` are novel
+     * If they **ARE** new --> write to the updated SAM file
+     * If **NOT** new --> throw out this read and move to the next line
+
+#### Useful functions:
+
+```
+def UMI_check(UMI, UMI_list):
+    if the UMI is in UMI_list:
+        return True
+    if UMI is not in the UMI_list:
+        return False
+```
+
+```
+def CIGAR_check(CIGAR, POSITION):
+    if CIGAR string begins with soft clipping:
+        subtract from POSITION
+        
+    return new POSITION
+```
