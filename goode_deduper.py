@@ -2,9 +2,9 @@
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("-f", "--filename", required=True)
-parser.add_argument("-p", "--paired", action="store_true")
-parser.add_argument("-u", "--umi")
+parser.add_argument("-f", "--filename", required=True, help='Input SAM file (Must be sorted according to position)')
+parser.add_argument("-p", "--paired", action="store_true", help='Designates that the input file is paired-end data')
+parser.add_argument("-u", "--umi", help='Provide a file of expected UMIs (optional)')
 args = parser.parse_args()
 
 # If user specifies paired-end option, exit with error
