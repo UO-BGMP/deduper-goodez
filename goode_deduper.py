@@ -80,7 +80,7 @@ deduped = open(prefix+"_deduped.sam",'w')
 # unrecognized UMIs
 dupe_count = 0
 
-with open("short.sam", 'r') as fh:
+with open(args.filename, 'r') as fh:
     line_count = 0
     for read in fh:
         # Write header info to file
@@ -149,4 +149,4 @@ with open("short.sam", 'r') as fh:
 deduped.close()
 
 print("Done...")
-print("Removed " + dupe_count + " duplicates or unrecognized UMIs (if UMIs were supplied)")
+print("Removed " + str(dupe_count) + " duplicates or unrecognized UMIs (if UMIs were supplied)")
