@@ -2,9 +2,9 @@
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("-f", "--filename", required=True)
-parser.add_argument("-p", "--paired", action="store_true")
-parser.add_argument("-u", "--umi")
+parser.add_argument("-f", "--filename", required=True, help='Input SAM file (Must be sorted according to position)')
+parser.add_argument("-p", "--paired", action="store_true", help='Designates that the input file is paired-end data')
+parser.add_argument("-u", "--umi", help='Provide a file of expected UMIs (optional)')
 args = parser.parse_args()
 
 # If user specifies paired-end option, exit with error
@@ -80,7 +80,7 @@ deduped = open(prefix+"_deduped.sam",'w')
 # unrecognized UMIs
 dupe_count = 0
 
-with open("short.sam", 'r') as fh:
+with open(args.filename, 'r') as fh:
     line_count = 0
     for read in fh:
         # Write header info to file
@@ -149,4 +149,4 @@ with open("short.sam", 'r') as fh:
 deduped.close()
 
 print("Done...")
-print("Removed " + dupe_count + " duplicates or unrecognized UMIs (if UMIs were supplied)")
+print("Removed " + str(dupe_count) + " duplicates or unrecognized UMIs (if UMIs were supplied)")
