@@ -70,11 +70,8 @@ def strand_check(FLAG):
 # END OF FUNCTIONS ****************************************************
 #*******************
 
-#file prefix to name output
-prefix = args.filename[:-4]
-
 # Open output sam file without duplicates
-deduped = open(prefix+"_deduped.sam",'w')
+deduped = open(args.filename+"_deduped",'w')
 
 # Counter which will tell user number of removed dupes or 
 # unrecognized UMIs
